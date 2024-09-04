@@ -97,3 +97,4 @@ function displayWeatherData(data) {
 
   weatherElement.innerHTML = weatherHTML; // Update the element's innerHTML with the weather data
 }
+
