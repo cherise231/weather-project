@@ -1,0 +1,25 @@
+body {
+    background-color: skyblue;
+}
+
+h1 {
+    text-align: center;
+}
+
+.weather-dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.weather-day {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.weather-day h2 {
+    margin-top: 0;
+}
