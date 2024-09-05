@@ -1,8 +1,15 @@
 body {
     background-color: skyblue;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-h1 {
+.top-section1 h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    text-align: center;
+}
+
+.top-section1 h2 {
     text-align: center;
 }
 
@@ -22,4 +29,28 @@ h1 {
 
 .weather-day h2 {
     margin-top: 0;
+    
 }
+
+/* Add this to your CSS file or within a <style> tag */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  th, td {
+    border: 1px solid #ffffff;
+    padding: 8px;
+    text-align: center; 
+  }
+  
+  th {
+    background-color: #ffffff;
+    font-weight: bold;
+  }
+  
+  td {
+    text-align: center; 
+  }
+  

@@ -21,7 +21,7 @@ console.log("javascript is working!");
 //     } catch (error) {
      
 //     }
-//     console.log(data); // Moved this line here
+//     console.log(data); 
 //     if (data) {
 //       const daily = data.daily;
 //       const highTemp = daily.temperature_2m_max[0];
@@ -79,22 +79,50 @@ function getDay(dateTime) {
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   }
 
-function displayWeatherData(data) {
-  const weatherElement =
-    document.getElementsByClassName("weather-dashboard")[0];
-  const hourlyTemperatures = data.hourly.temperature_2m;
-  const hourlyTimes = data.hourly.time;
+  function displayWeatherData(data) {
+    const weatherElement = document.getElementsByClassName("weather-dashboard")[0];
+    const hourlyTemperatures = data.hourly.temperature_2m;
+    const hourlyTimes = data.hourly.time;
+  
+   let weatherHTML = "";  // Initialize an empty string to build the weather HTML
+  
+    hourlyTemperatures.forEach((temperature, index) => {
+      const dateTime = new Date(hourlyTimes[index]);
+      const day = getDay(dateTime);
+      const timeString = getTime(dateTime);
+      //weatherHTML += `${day} ${timeString}: ${temperature}°F<br>`;  Build the weather HTML
+    });
+  
+    weatherElement.innerHTML = weatherHTML; // Update the element's innerHTML with the weather data
+  
+    // Create the chart data array
+    const chartData = hourlyTemperatures.map((temperature, index) => {
+      const dateTime = new Date(hourlyTimes[index]);
+      const day = getDay(dateTime);
+      const timeString = getTime(dateTime);
+      return { day, time: timeString, temperature };
+    });
+  
+    // Create a table chart
+    const tableHTML = `
+      <table>
+        <tr>
+          <th>Day</th>
+          <th>Time</th>
+          <th>Temperature (°F)</th>
+        </tr>
+        ${chartData.map((point) => `
+          <tr>
+            <td>${point.day}</td>
+            <td>${point.time}</td>
+            <td>${point.temperature}</td>
+          </tr>
+          
+        `).join("")}
+      </table>
+    `;
+  
+    const chartElement = document.getElementById("weather-chart");
+    chartElement.innerHTML = tableHTML;
 
-  let weatherHTML = ""; // Initialize an empty string to build the weather HTML
-
-  hourlyTemperatures.forEach((temperature, index) => {
-    const dateTime = new Date(hourlyTimes[index]);
-    const day = getDay(dateTime);
-    const timeString = getTime(dateTime);
-    console.log("hourlyTemps");
-    weatherHTML += `${day} ${timeString}: ${temperature}°F<br>`; // Build the weather HTML
-  });
-
-  weatherElement.innerHTML = weatherHTML; // Update the element's innerHTML with the weather data
-}
-
+  }
