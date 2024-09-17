@@ -1,5 +1,36 @@
 console.log("javascript is working!");
 
+fetch(
+  `https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_Angeles`
+)
+  .then((response) => response.json())
+  .then((data) => {
+    const currentWeather = data.current_weather;
+    // const weatherHTML = `
+    //   <h2>Current Weather</h2>
+    //   <p>Temperature: ${currentWeather.temperature}°F</p>
+    //   <p>Relative Humidity: ${currentWeather.relativehumidity}%</p>
+    //   <p>Apparent Temperature: ${currentWeather.apparent_temperature}°F</p>
+    //   <p>Is Day: ${currentWeather.is_day ? "Yes" : "No"}</p>
+    //   <p>Precipitation: ${currentWeather.precipitation} inches</p>
+    //   <p>Rain: ${currentWeather.rain} inches</p>
+    //   <p>Showers: ${currentWeather.showers} inches</p>
+    //   <p>Snowfall: ${currentWeather.snowfall} inches</p>
+    //   <p>Weather Code: ${currentWeather.weathercode}</p>
+    //   <p>Cloud Cover: ${currentWeather.cloudcover}%</p>
+    //   <p>Pressure MSL: ${currentWeather.pressure_msl} hPa</p>
+    //   <p>Surface Pressure: ${currentWeather.surface_pressure} hPa</p>
+    //   <p>Wind Speed: ${currentWeather.windspeed_10m} mph</p>
+    //   <p>Wind Direction: ${currentWeather.winddirection_10m}°</p>
+    //   <p>Wind Gusts: ${currentWeather.windgusts_10m} mph</p>
+    // `;
+    document.getElementById("weather-container").innerHTML = weatherHTML;
+  })
+  .catch((error) => {
+    console.error("An error occurred:", error.message);
+    console.error("Error stack:", error.stack);
+  });
+
 const url =
   "https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194&current=temperature_2m,rain&hourly=temperature_2m,rain&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles&past_days=1";
 

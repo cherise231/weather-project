@@ -59,3 +59,27 @@ table {
     background-color: rgb(255, 255, 255);
     padding: 1em;
   }
+
+  .weather-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(253, 253, 253, .5);
+  }
+  
+  .weather-info p {
+    margin-bottom: 10px;
+  }
+  
+  .weather-info span {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
