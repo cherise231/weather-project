@@ -155,3 +155,100 @@ function getMonthDate(dateTime) {
   const date = dateTime.getDate();
   return `${month} ${date}`;
 }
+
+//todays weather
+// fetch(
+//   `https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_Angeles`
+// )
+//   .then((response) => response.json())
+//   .then((data) => {
+//     if (data && data.current) {
+//       const currentWeather = data.current;
+//       const currentUnits = data.current_units;
+//       const weatherHTML = `
+//           <h2>Current Weather</h2>
+          
+//           <div class="weather-info">
+//           <div class="temp-container">
+//             <h3><span> ${
+//               currentWeather.temperature_2m
+//             }</span> <span class="temp-unit">${
+//         currentUnits.temperature_2m
+//       }</span></h3>
+//           </div>
+
+//           <div class="weather-details">
+//           <div class="preview-weather-info-shown">
+//             <p><span>Relative Humidity:</span> ${
+//               currentWeather.relative_humidity_2m
+//             } ${currentUnits.relative_humidity_2m}</p>
+//             <p><span>Apparent Temperature:</span> ${
+//               currentWeather.apparent_temperature
+//             } ${currentUnits.apparent_temperature}</p>
+//             <p><span>Is Day:</span> ${currentWeather.is_day ? "Yes" : "No"}</p>
+//             </div>
+
+//             <div class="hidden-weather-info hidden">
+//             <p><span>Precipitation:</span> ${currentWeather.precipitation} ${
+//         currentUnits.precipitation
+//       }</p>
+//             <p><span>Rain:</span> ${currentWeather.rain} ${
+//         currentUnits.rain
+//       }</p>
+//             <p><span>Showers:</span> ${currentWeather.showers} ${
+//         currentUnits.showers
+//       }</p>
+//             <p><span>Snowfall:</span> ${currentWeather.snowfall} ${
+//         currentUnits.snowfall
+//       }</p>
+//             <p><span>Weather Code:</span> ${currentWeather.weather_code} ${
+//         currentUnits.weather_code
+//       }</p>
+//             <p><span>Cloud Cover:</span> ${currentWeather.cloud_cover} ${
+//         currentUnits.cloud_cover
+//       }</p>
+//             <p><span>Pressure MSL:</span> ${currentWeather.pressure_msl} ${
+//         currentUnits.pressure_msl
+//       }</p>
+//             <p><span>Surface Pressure:</span> ${
+//               currentWeather.surface_pressure
+//             } ${currentUnits.surface_pressure}</p>
+//             <p><span>Wind Speed:</span> ${currentWeather.wind_speed_10m} ${
+//         currentUnits.wind_speed_10m
+//       }</p>
+//             <p><span>Wind Direction:</span> ${
+//               currentWeather.wind_direction_10m
+//             } ${currentUnits.wind_direction_10m}</p>
+//             <p><span>Wind Gusts:</span> ${currentWeather.wind_gusts_10m} ${
+//         currentUnits.wind_gusts_10m
+//       }</p>
+//       </div>
+//           </div>
+//             <button class="see-more-btn">See More</button>
+//           </div>
+//         `;
+
+//       document.getElementById("weather-container").innerHTML = weatherHTML;
+
+//       //  See More button
+//       document.querySelector(".see-more-btn").addEventListener("click", () => {
+//         const hiddenWeatherInfo = document.querySelector(
+//           ".hidden-weather-info"
+//         );
+//         hiddenWeatherInfo.classList.toggle("hidden");
+//         if (hiddenWeatherInfo.classList.contains("hidden")) {
+//           document.querySelector(".see-more-btn").textContent = "See More";
+//         } else {
+//           document.querySelector(".see-more-btn").textContent = "See Less";
+//         }
+//       });
+//     } else {
+//       console.error("Error: No current weather data available.");
+//       document.getElementById("weather-container").innerHTML =
+//         "Error: No current weather data available.";
+//     }
+//   })
+//   .catch((error) => {
+//     console.error("An error occurred:", error.message);
+//     console.error("Error stack:", error.stack);
+//   });
