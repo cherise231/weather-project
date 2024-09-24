@@ -2,29 +2,6 @@ console.log("javascript is working!");
 
 //  main page
 
-function getMonthDate(dateTime) {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const month = monthNames[dateTime.getMonth()];
-  console.log(month, "month");
-  const date = dateTime.getDate();
-  console.log(date, ":date");
-
-  return `${month} ${date}`;
-}
-
 function getWeatherDescription(weatherCode) {
   const weatherDescriptions = {
     0: "Clear sky",
@@ -131,11 +108,11 @@ function showHourlyWeather(dateString) {
 
       let hourlyWeatherHTML = `
         <h2>Hourly Weather for <br>${formattedDateString}</h2>
-        <table>
+        <table class="hourly-weather">
           <tr>
             <th>Hour</th>
-            <th>Temperature (°F)</th>
-            <th>Weather Code</th>
+            <th>Temp (°F)</th>
+           <!-- <th>Weather Code</th> -->
             <th>Description</th>
           </tr>
       `;
@@ -147,7 +124,7 @@ function showHourlyWeather(dateString) {
           <tr>
             <td>${hour}</td>
             <td>${hourlyData.temperature}</td>
-            <td>${hourlyData.weatherCode}</td>
+            <!--<td>${hourlyData.weatherCode}</td>-->
             <td>${hourlyData.description}</td>
           </tr>
         `;
@@ -175,28 +152,35 @@ function fetchDailyData() {
     .then((response) => response.json())
     .then((data) => {
       const dailyData = data.daily;
-
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
       const today = new Date();
       // const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
       // const startDay = tomorrow.getDay();
-      const startDay = today.getDay();
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-      let calendarHTML = "<table><tr>";
+      const todayIndex = today.getDay();
+      console.log(todayIndex, "todayIndex");
 
-      // daysOfWeek.forEach((day) => {
-      //   calendarHTML += `<th>${day}</th>`;
-      // });
-
-      for (let i = startDay; i < startDay + 7; i++) {
-        const dayIndex = i % 7;
-        calendarHTML += `<th>${daysOfWeek[dayIndex]}</th>`;
+      // let calendarHTML = "<table class='calendar-table'><tr>";
+      let calendarHTML = "<table class='calendar-table'><tr><th colspan='7' style='text-align: center'>Weekly Forecast</th></tr><tr>";
+      let daysOfWeekArray = [];
+      for (let i = 0; i < 7; i++) {
+        let dayIndex = (todayIndex + i) % 7; // Adds the current day index and wrap around to 0-6
+        const dayOfWeek = daysOfWeek[dayIndex];
+        daysOfWeekArray.push(dayOfWeek);
+        // calendarHTML += `<th>${dayOfWeek}</th>`;
+        // dayIndex = (dayIndex + 1) % 7;
       }
 
       calendarHTML += "</tr><tr>";
 
       dailyData.time.forEach((time, index) => {
-        const dateTime = new Date(time);
-        dateTime.setDate(dateTime.getDate() + 1);
+        const dateTime = new Date(Date.parse(time));
+        if (isNaN(dateTime.getTime())) {
+          console.error(`Invalid date: ${time}`);
+          return;
+        }
+
+        // const dayOfWeek = getDayOfWeek(dateTime);
+
         const date = getMonthDate(dateTime);
         const highTemp = dailyData.temperature_2m_max[index];
         const lowTemp = dailyData.temperature_2m_min[index];
@@ -207,13 +191,16 @@ function fetchDailyData() {
           );
           return;
         }
-
+        
         const dayHTML = `
+        
           <td>
-            <button onclick="showHourlyWeather('${time}')">
-              <h2>${date}</h2>
-              <p>High: ${highTemp.toFixed(1)}°F</p>
-              <p>Low: ${lowTemp.toFixed(1)}°F</p>
+            <button class="weather-button" onclick="showHourlyWeather('${time}')">
+             <p>${date}</p>
+             <h2>${daysOfWeekArray[index]}</h2> 
+
+              <h3>High: ${highTemp.toFixed(1)}°F</h3>
+              <h3>Low: ${lowTemp.toFixed(1)}°F</h3>
             </button>
           </td>
         `;
@@ -234,103 +221,179 @@ function fetchDailyData() {
     });
 }
 
+function getDayOfWeek(date) {
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return daysOfWeek[date.getDay()];
+}
+
+function getMonthDate(dateTime) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "Sept",
+    "Oct",
+    "November",
+    "December",
+  ];
+  const month = monthNames[dateTime.getUTCMonth()];
+  console.log(month, "month");
+  const date = dateTime.getUTCDate();
+  console.log(date, ":date");
+
+  return `${month} ${date}`;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   fetchDailyData(); // Load daily data on page load
 });
 
 // todays weather
-fetch(
-  `https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_Angeles`
-)
-  .then((response) => response.json())
-  .then((data) => {
-    if (data && data.current) {
-      const currentWeather = data.current;
-      const currentUnits = data.current_units;
-      const weatherHTML = `
-          <h2>Current Weather</h2>
-          
-          <div class="weather-info">
-          <div class="temp-container">
-            <h3><span> ${
-              currentWeather.temperature_2m
-            }</span> <span class="temp-unit">${
-        currentUnits.temperature_2m
-      }</span></h3>
-          </div>
+/**
+ * Fetches and displays the current weather data from the Open-Meteo API.
+ */
+function displayCurrentWeather() {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_Angeles`;
 
-          <div class="weather-details">
-          <div class="preview-weather-info-shown">
-            <p><span>Relative Humidity:</span> ${
-              currentWeather.relative_humidity_2m
-            } ${currentUnits.relative_humidity_2m}</p>
-            <p><span>Apparent Temperature:</span> ${
-              currentWeather.apparent_temperature
-            } ${currentUnits.apparent_temperature}</p>
-            <p><span>Is Day:</span> ${currentWeather.is_day ? "Yes" : "No"}</p>
-            </div>
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data && data.current) {
+        const currentWeather = data.current;
+        const currentUnits = data.current_units;
+        const weatherHTML = generateWeatherHTML(currentWeather, currentUnits);
+        document.getElementById("weather-container").innerHTML = weatherHTML;
+        addSeeMoreButtonEvent();
+      } else {
+        console.error("Error: No current weather data available.");
+        document.getElementById("weather-container").innerHTML =
+          "Error: No current weather data available.";
+      }
+    })
+    .catch((error) => {
+      console.error("An error occurred:", error.message);
+      console.error("Error stack:", error.stack);
+    });
+}
 
-            <div class="hidden-weather-info hidden">
-            <p><span>Precipitation:</span> ${currentWeather.precipitation} ${
-        currentUnits.precipitation
-      }</p>
-            <p><span>Rain:</span> ${currentWeather.rain} ${
-        currentUnits.rain
-      }</p>
-            <p><span>Showers:</span> ${currentWeather.showers} ${
-        currentUnits.showers
-      }</p>
-            <p><span>Snowfall:</span> ${currentWeather.snowfall} ${
-        currentUnits.snowfall
-      }</p>
-            <p><span>Weather Code:</span> ${currentWeather.weather_code} ${
-        currentUnits.weather_code
-      }</p>
-            <p><span>Cloud Cover:</span> ${currentWeather.cloud_cover} ${
-        currentUnits.cloud_cover
-      }</p>
-            <p><span>Pressure MSL:</span> ${currentWeather.pressure_msl} ${
-        currentUnits.pressure_msl
-      }</p>
-            <p><span>Surface Pressure:</span> ${
-              currentWeather.surface_pressure
-            } ${currentUnits.surface_pressure}</p>
-            <p><span>Wind Speed:</span> ${currentWeather.wind_speed_10m} ${
-        currentUnits.wind_speed_10m
-      }</p>
-            <p><span>Wind Direction:</span> ${
-              currentWeather.wind_direction_10m
-            } ${currentUnits.wind_direction_10m}</p>
-            <p><span>Wind Gusts:</span> ${currentWeather.wind_gusts_10m} ${
-        currentUnits.wind_gusts_10m
-      }</p>
-      </div>
-          </div>
-            <button class="see-more-btn">See More</button>
-          </div>
-        `;
+/**
+ * Generates the HTML for the current weather data.
+ * @param {Object} currentWeather - The current weather data.
+ * @param {Object} currentUnits - The units for the current weather data.
+ * @returns {string} The HTML for the current weather data.
+ */
 
-      document.getElementById("weather-container").innerHTML = weatherHTML;
-
-      //  See More button
-      document.querySelector(".see-more-btn").addEventListener("click", () => {
-        const hiddenWeatherInfo = document.querySelector(
-          ".hidden-weather-info"
-        );
-        hiddenWeatherInfo.classList.toggle("hidden");
-        if (hiddenWeatherInfo.classList.contains("hidden")) {
-          document.querySelector(".see-more-btn").textContent = "See More";
-        } else {
-          document.querySelector(".see-more-btn").textContent = "See Less";
-        }
-      });
-    } else {
-      console.error("Error: No current weather data available.");
-      document.getElementById("weather-container").innerHTML =
-        "Error: No current weather data available.";
-    }
-  })
-  .catch((error) => {
-    console.error("An error occurred:", error.message);
-    console.error("Error stack:", error.stack);
+function generateWeatherHTML(currentWeather, currentUnits) {
+  const weatherCode = currentWeather.weather_code;
+  const currentTime = new Date();
+  let sfTime = currentTime.toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles",
   });
+
+  const weatherDescription = getWeatherDescription(weatherCode);
+
+  setInterval(() => {
+    const currentTime = new Date();
+    sfTime = currentTime.toLocaleTimeString("en-US", {
+      timeZone: "America/Los_Angeles",
+      // hour12: true,
+      // minute: "2-digit",
+    });
+    const sfDay = currentTime.toLocaleDateString("en-US", {
+      timeZone: "America/Los_Angeles",
+      weekday: "long",
+    });
+
+    document.querySelector(
+      ".weather-info p span"
+    ).innerText = `${sfDay}, ${sfTime}`;
+  }, 1000);
+
+  return `
+    
+    
+    <div class="weather-info">
+    <!-- <h2>Current Weather</h2> -->
+    <h2>San Francisco, CA</h2>
+    <p><span>Current Time: </span></p>
+      <div class="temp-container">
+        <h3><span> ${
+          currentWeather.temperature_2m
+        }</span> <span class="temp-unit">${
+    currentUnits.temperature_2m
+  } </span></h3>
+          
+  
+      </div>
+        <h3 class="weather-description">${weatherDescription}</h3>
+      <div class="weather-details">
+        <div class="preview-weather-info-shown">
+          <p><span>Relative Humidity:</span> ${
+            currentWeather.relative_humidity_2m
+          } ${currentUnits.relative_humidity_2m}</p>
+          <p><span>Apparent Temperature:</span> ${
+            currentWeather.apparent_temperature
+          } ${currentUnits.apparent_temperature}</p>
+          <p><span>Is Day:</span> ${currentWeather.is_day ? "Yes" : "No"}</p>
+        </div>
+
+        <div class="hidden-weather-info hidden">
+          <p><span>Precipitation:</span> ${currentWeather.precipitation} ${
+    currentUnits.precipitation
+  }</p>
+          <p><span>Rain:</span> ${currentWeather.rain} ${currentUnits.rain}</p>
+          <p><span>Showers:</span> ${currentWeather.showers} ${
+    currentUnits.showers
+  }</p>
+          <p><span>Snowfall:</span> ${currentWeather.snowfall} ${
+    currentUnits.snowfall
+  }</p>
+         <!-- <p><span></span> ${weatherDescription}</p> -->
+          <p><span>Cloud Cover:</span> ${currentWeather.cloud_cover} ${
+    currentUnits.cloud_cover
+  }</p>
+          <p><span>Pressure MSL:</span> ${currentWeather.pressure_msl} ${
+    currentUnits.pressure_msl
+  }</p>
+          <p><span>Surface Pressure:</span> ${
+            currentWeather.surface_pressure
+          } ${currentUnits.surface_pressure}</p>
+          <p><span>Wind Speed:</span> ${currentWeather.wind_speed_10m} ${
+    currentUnits.wind_speed_10m
+  }</p>
+          <p><span>Wind Direction:</span> ${
+            currentWeather.wind_direction_10m
+          } ${currentUnits.wind_direction_10m}</p>
+          <p><span>Wind Gusts:</span> ${currentWeather.wind_gusts_10m} ${
+    currentUnits.wind_gusts_10m
+  }</p>
+        </div>
+      </div>
+      <button class="see-more-btn">See More</button>
+    </div>
+  `;
+}
+
+/**
+ * Adds an event listener to the "See More" button.
+ */
+function addSeeMoreButtonEvent() {
+  document.querySelector(".see-more-btn").addEventListener("click", () => {
+    const hiddenWeatherInfo = document.querySelector(".hidden-weather-info");
+    hiddenWeatherInfo.classList.toggle("hidden");
+    if (hiddenWeatherInfo.classList.contains("hidden")) {
+      document.querySelector(".see-more-btn").textContent = "See More";
+    } else {
+      document.querySelector(".see-more-btn").textContent = "See Less";
+    }
+  });
+}
+
+// Call the function to display the current weather
+displayCurrentWeather();

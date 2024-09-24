@@ -1,16 +1,183 @@
 body {
-  background-color: skyblue;
+  
+  background-image: url(/img/realistic_white_clouds_on_a_transparent_background2.png);
+  background-position: 10% 0%;
+  background-repeat: no-repeat;
+  /* background-image: url(/img/realistic_white_clouds_on_a_transparent_background.png);
+  background-position: 50% 50%; */
+  /* background-color: rgb(45, 160, 206); */
+  background-color: rgb(0, 165, 206);
   font-family: Arial, Helvetica, sans-serif;
+  /* color: white; */
+  /* letter-spacing: 1px; */
 }
+
+.weatherLogo {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-top: 10px;
+  margin-left: 10px;
+  position: relative;
+  color: rgb(255, 255, 255);
+}
+
+.cloud {
+  width: 40px;
+  height: 15px;
+  background-color: #ffffff;
+  border-radius: 40%;
+  position: relative;
+  z-index: 2;
+  background-size: 10px 10px;
+  background-position: 100px 0, 10px 10px;
+}
+
+.cloud2 {
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border-radius: 40%;
+  position: absolute; /* changed to absolute positioning */
+  top: 12px; /* moved 10px down from the top */
+  left: 20px; /* moved 15px from the left */
+  z-index: 2; /* kept z-index at 2 to stay on top */
+  background-size: 10px 10px;
+  background-position: 100px 0, 10px 10px;
+}
+
+.sun {
+  width: 20px;
+  height: 20px;
+  background-color: #f2c464;
+  border-radius: 60%;
+  position: absolute;
+  top: 5px;
+  left: 33px;
+  z-index: 1;
+  background-image: radial-gradient(#ffd700 20%, #ffdb8f 80%);
+  background-size: 5px 5px;
+  background-position: 10px 0 0px 10px;
+  margin-right: 10px;
+  animation: sun-movement 5s ease-in-out infinite;
+}
+
+.sun {
+  /* existing styles */
+  animation: sun-movement 5s ease-in-out infinite;
+}
+
+@keyframes sun-movement {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-30px);
+  }
+}
+
 
 .top-section1 h1 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2em;
   text-align: center;
+  /* color: white; */
+  /* text-shadow: 0px 0px 20px #5f5f5f; */
+  /* text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9); */
 }
 
 .top-section1 h2 {
   text-align: center;
+}
+
+/* current weather */
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  /* border: 1px solid #ffffff; */
+  border-radius: 20px;
+  color: #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.5);
+  /* background-color: rgba(0, 82, 114, 0.2); */
+  /* width: 40%; */
+  width: 21em;
+  margin: 40px auto;
+  /* color: white; */
+  /* text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9); */
+}
+
+.weather-info h3 {
+  font-weight: bold;
+}
+
+.weather-info h3 span:first-child {
+  font-size: 55px;
+  font-weight: 500;
+}
+
+.weather-info .temp-unit {
+  font-size: 30px;
+  font-weight: 500;
+  position: relative;
+  top: -14px;
+}
+.weather-info p span {
+  margin-bottom: 10px;
+
+  font-weight: bold;
+}
+
+.weather-description {
+  font-size: 40px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.see-more-btn {
+  background-color: #003ce0;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin: 22px 0;
+}
+
+.see-more-btn:hover {
+  background-color: #002ab3;
+}
+
+.see-more-btn:active {
+  background-color: #0086df;
+}
+
+.calendar-table {
+  background-color: skyblue;
+  margin-bottom: 50px;
+  margin-top: 80px;
+  font-size: 30px;
+  /* border-collapse: collapse; */
+  /* opacity: 0.5; */
+}
+
+.calendar-table th,
+.calendar-table td {
+  /* border: none;
+  border-style: none; */
+  border: 1px solid #57c2ff;
+  /* opacity: 0.5; */
 }
 
 .weather-dashboard {
@@ -39,8 +206,8 @@ table {
 
 th,
 td {
-  border: 1px solid #ffffff;
-  padding: 8px;
+  border: 1px solid #72c0ff;
+  /* padding: 8px; */
   text-align: center;
 }
 
@@ -48,75 +215,80 @@ tr {
   font-weight: bold;
 }
 
-td {
+/* td {
   text-align: center;
-  /* background-color: pink; */
-}
+  /* background-color: pink;
+  
+} */
 
 .day-title {
   background-color: rgb(255, 255, 255);
   padding: 1em;
 }
 
-/* current weather */
-.weather-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* padding: 20px; */
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-  background-color: rgb(253, 253, 253, 0.5);
-  width: 50%;
-  margin: 40px auto;
-}
-
-.weather-info h3 {
-  font-weight: bold;
-}
-
-.weather-info h3 span:first-child {
-  font-size: 55px;
-  font-weight: 500;
-  
-}
-
-.weather-info .temp-unit {
-  font-size: 30px;
-  font-weight: 500;
-  position: relative;
-  top: -14px;
-  
-}
-.weather-info p span{
-  margin-bottom: 10px;
-  
-  font-weight: bold;
-}
-
-
-
-.hidden {
-  display: none;
-}
-
-.see-more-btn {
-  background-color: #4CAF50; 
-  color: #fff;
-  padding: 10px 20px;
+.weather-button {
+  width: 100%;
+  padding: 10px;
+  margin: 0;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  border-radius: 5px;
+  /*background-color: #f7f7f7;  light gray background */
+  background-color: rgba(247, 247, 247, 0.7);
+  color: #333; /* dark gray text */
   font-size: 16px;
-  transition: background-color 0.3s;
-  margin: 22px 0;
+  font-weight: bold;
+  cursor: pointer;
+  border-top: 6px solid rgb(35, 130, 255);
 }
 
-.see-more-btn:hover {
-  background-color: #3e8e41; 
+.weather-button:hover {
+  background-color: #e6feff;
+  color: #333;
+  border-top: 6px solid rgb(0, 238, 255);
+  text-decoration: underline;
 }
 
-.see-more-btn:active {
-  background-color: #2e6d31; 
+.hourly-weather,
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hourly-weather th,
+.calendar-table th {
+  font-size: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: rgba(240, 240, 240, 0.5);
+  /* background-color: #f0f0f0; */
+}
+
+.hourly-weather th:first-child,
+.calendar-table th:first-child {
+  border-left: none;
+}
+
+.hourly-weather th:last-child,
+.calendar-table th:last-child {
+  border-right: none;
+}
+
+.hourly-weather td,
+.calendar-table td {
+  padding: 2px;
+  border: 1px solid skyblue;
+}
+
+.hourly-weather h2,
+.calendar-table caption {
+  text-align: center;
+  font-weight: bold;
+}
+
+.hourly-weather {
+  width: 50%;
+  display: table;
+  margin: 0 auto;
+  border-collapse: collapse;
+  margin-bottom: 200px;
 }
