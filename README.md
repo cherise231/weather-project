@@ -11,5 +11,5 @@ OR
 1. Open Vs Code.
 2. Open the folder using VS code.
 3. Install Live Server extension.
-4. Click on Live Server button.
+4. Click on Live Server button on bottom left corner.
 5. Your web browser should pop up with the HTML file loaded.
